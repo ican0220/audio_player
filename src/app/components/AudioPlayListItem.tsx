@@ -12,7 +12,7 @@ interface AudioPlayListItemProps {
 const AudioPlayListItem: React.FC<AudioPlayListItemProps> = ({ data }) => {
   const [isPlay, setIsPlay] = useState(false);
   return (
-    <div className="flex items-center px-[10px] py-[5px] border-b-2 border-b-white gap-4">
+    <div className="flex items-center justify-between px-[10px] py-[5px] border-b-2 border-b-white gap-4">
       <div
         className="p-[20px] hover:cursor-pointer relative"
         onClick={() => setIsPlay((_) => !_)}

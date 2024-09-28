@@ -28,7 +28,7 @@ const Collapse: React.FC<CollpaseProps> = ({ title, moodFilterItems, addItem, re
     <div>
       <button
         onClick={toggleCollapse}
-        className='bg-transparent text-white cursor-pointer w-full px-[10px] py-[5px]'
+        className='bg-transparent dark:text-white text-stone-800 cursor-pointer w-full px-[10px] py-[5px]'
       >
         {isOpen ? <div className='flex justify-between items-center'>
             <p>Hide {title}</p>
