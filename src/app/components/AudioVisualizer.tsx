@@ -3,10 +3,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { AudioVisualizer } from "react-audio-visualize";
 
 interface VisualizerProps {
-  isPlay: boolean;
+  isPlay: boolean,
+  isSelected: boolean,
+  song_url: string,
 }
 
-const Visualizer: React.FC<VisualizerProps> = ({ isPlay }) => {
+const Visualizer: React.FC<VisualizerProps> = ({ isPlay, isSelected, song_url }) => {
   const [blob, setBlob] = useState<Blob>();
   const audioRef = useRef<HTMLAudioElement>(null);
   const visualizerRef = useRef<HTMLCanvasElement>(null);
@@ -53,7 +55,7 @@ const Visualizer: React.FC<VisualizerProps> = ({ isPlay }) => {
   }, [blob]);
   const fetchBlobFile = async () => {
     try {
-      const response = await fetch("/audios/test.mp3");
+      const response = await fetch(song_url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -69,20 +71,31 @@ const Visualizer: React.FC<VisualizerProps> = ({ isPlay }) => {
   };
 
   useEffect(() => {
-    if (isPlay) {
-      try {
-        audioRef.current?.play(); // Call play() on the audio element
-      } catch (error) {
-        console.error("Error playing audio:", error);
+    if(isSelected){
+      if (isPlay) {
+        try {
+          audioRef.current?.play(); // Call play() on the audio element
+        } catch (error) {
+          console.error("Error playing audio:", error);
+        }
+      } else {
+        try {
+          audioRef.current?.pause(); // Call play() on the audio element
+        } catch (error) {
+          console.error("Error playing audio:", error);
+        }
       }
-    } else {
+    } else{
       try {
-        audioRef.current?.pause(); // Call play() on the audio element
+        if(audioRef.current){
+          audioRef.current.pause(); // Pause the audio
+          audioRef.current.currentTime = 0;
+        }
       } catch (error) {
         console.error("Error playing audio:", error);
       }
     }
-  }, [isPlay]);
+  }, [isPlay, isSelected]);
 
   useEffect(() => {
     fetchBlobFile();
@@ -101,7 +114,7 @@ const Visualizer: React.FC<VisualizerProps> = ({ isPlay }) => {
   return (
     <div className="flex items-center">
       <div>
-        <audio ref={audioRef} src="/audios/test.mp3" />
+        <audio ref={audioRef} src={song_url} />
         {blob && (
           <div
             style={{
@@ -117,9 +130,9 @@ const Visualizer: React.FC<VisualizerProps> = ({ isPlay }) => {
                 left: 0,
                 transform: "translateY(-50%)",
                 width: progressWidth,
-                height: "100px",
-                backgroundColor: "black",
+                height: "100px"
               }}
+              className="bg-white dark:bg-black"
             ></div>
             <AudioVisualizer
               ref={visualizerRef}

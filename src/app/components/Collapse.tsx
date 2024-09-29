@@ -6,22 +6,23 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 interface CollpaseProps{
     title: string,
     moodFilterItems: any,
+    filterList: any,
     addItem: (x: string) => void,
     removeItem: (x: string) => void,
 }
 
-const Collapse: React.FC<CollpaseProps> = ({ title, moodFilterItems, addItem, removeItem }) => {
+const Collapse: React.FC<CollpaseProps> = ({ title, moodFilterItems, filterList, addItem, removeItem }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleCollapse = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleCheck = (e: any, _: string) => {
-    if(e.target.checked){
-        addItem(_)
+  const handleCheck = ( _: string) => {
+    if(filterList.filter((item: any) => item == _).length > 0){
+        removeItem(_)
     } else {
-        removeItem(_);
+        addItem(_);
     }
   }
   return (
@@ -50,9 +51,9 @@ const Collapse: React.FC<CollpaseProps> = ({ title, moodFilterItems, addItem, re
         {isOpen && (
           <div style={{ padding: '10px 0' }}>
                 {moodFilterItems.map((_: any, index: any) => (
-                    <div key={index} className='flex items-center'>
-                        <input type='checkbox' className='mr-2'  onChange={(e) => handleCheck(e, _)}/>
-                        <label>{_}</label>
+                    <div key={index} className='flex items-center' onClick={() => handleCheck(_)}>
+                        <input type='checkbox' className='mr-2  hover:cursor-pointer'  checked={filterList.filter((item: any) => item == _).length > 0}/>
+                        <label className='hover:cursor-pointer'>{_}</label>
                     </div>
                 ))}
           </div>
