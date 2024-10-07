@@ -15,6 +15,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
         </div>
       </div>
       <h1 className="text-center">@2024</h1>
+      <div></div>
     </div>
   );
 };
